@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link type="text/css" rel="stylesheet" href="{{url_for('static', filename='css/fonts.css')}}" />
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      margin: 0;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      background-color: #e09f1e;
+      height: 25px;
+      padding: 16px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .search {
+      width: 100%;
+      max-width: 600px;
+    }
+
+    input {
+      border: 0;
+      border-radius: 8px;
+      width: 100%;
+      height: 25px;
+    }
+
+    .stencilContainer {
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      padding: 16px;
+      border-radius: 8px;
+      margin: 8px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .stencilPreview {
+      width: 200px;
+    }
+
+    .stencilImage {
+      display: block;
+      max-width: 150px;
+      max-height: 500px;
+    }
+
+    .stencilText {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stencilName {
+      font-size: large;
+    }
+
+    .stencilPrompt {
+      font-size: small;
+    }
+
+    .stencilKeywords {
+      font-size: small;
+    }
+
+    .stencilDownload {
+      font-size: small;
+    }
+
+    .stencilUploadDate {
+      color: rgba(0, 0, 0, 0.4);
+      font-size: smaller;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <form class="search" action="" method="POST">
+      <input name="search" placeholder="Search...">
+    </form>
+  </header>
+  {% for master in masters %}
+  <div class="stencilContainer">
+    <div class="stencilPreview">
+      <a href="{{ url_for('static', filename='images/'~master.id~'.png') }}"> <img class="stencilImage"
+          src="{{ url_for('static', filename='images/'~master.id~'.png') }}" /> </a>
+    </div>
+    <div class="stencilText">
+      <div class="stencilName">
+        {{master.name}}
+      </div>
+      <div class="stencilPrompt">
+        {{master.prompt}}
+      </div>
+      <div class="stencilKeywords">
+        {{master.keywords}}
+      </div>
+      <div class="stencilDownload">
+        <a href="/download/{{master.stencil.id}}">{{master.stencil.fileName}}</a>
+      </div>
+      <div class="stencilUploadDate">
+        Upload date: {{master.stencil.uploadDate.strftime('%d.%m.%Y')}} ({{master.stencil.downloadCounter}} downloads)
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</body>
+
+</html>
