@@ -28,3 +28,5 @@ Click on the stencil will start the download and increment the download counter.
 * Comments, Voting (maybe download counter is enough)?
 * Access rights requred?
 * License for contributed stencils?
+
+![Screenshot](/Doc/Images/VisioOnlineShapesLibrary.png?raw=true "Screenshot")
