@@ -91,7 +91,7 @@
   </header>
   {% for master in masters %}
   <div class="stencilContainer">
-    <div class="stencilPreview">
+    <div class="stencilPreview" id="{{master.id}}">
       <a href="{{ url_for('static', filename='images/'~master.id~'.png') }}"> <img class="stencilImage"
           src="{{ url_for('static', filename='images/'~master.id~'.png') }}" /> </a>
     </div>
@@ -114,6 +114,21 @@
     </div>
   </div>
   {% endfor %}
+
+  <script>
+    var WebViewDragDrop = window.chrome.webview.hostObjects.WebViewDragDrop;
+    var masters = document.getElementsByClassName('stencilPreview');
+    for( i=0; i < masters.length; i++ ){
+      var master = masters[i];
+      master.addEventListener("mousedown", (e) => {
+        if (e.button === 0) {
+          fetch('http://127.0.0.1:5000/getshape/' + e.currentTarget.id)
+          .then(response => response.text())
+          .then(text => WebViewDragDrop.DragDropShape(text))
+        }
+      });
+    }
+  </script>
 </body>
 
 </html>

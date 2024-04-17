@@ -37,7 +37,8 @@ class Master(Base):
     name: Mapped[str] = mapped_column(String(32))
     prompt: Mapped[str] = mapped_column(String(512))
     keywords: Mapped[str] = mapped_column(String(512))
-    stencil_id: Mapped[int] = mapped_column(ForeignKey("stencils.id"))
+    dataObject: Mapped[str] = mapped_column(String(60000))
+    stencilId: Mapped[int] = mapped_column(ForeignKey("stencils.id"))
     stencil: Mapped["Stencil"] = relationship(back_populates="masters")
     def __repr__(self) -> str:
         return f"Master(id={self.id!r}, name={self.name!r})"

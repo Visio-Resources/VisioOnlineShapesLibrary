@@ -21,13 +21,18 @@ def search_masters():
     masters = session.scalars(select(Master).where(Master.name.contains(search)).order_by(Master.id)).all()
     return render_template('index.html', masters=masters)
 
-@app.route('/download/<stencil_id>')
-def download(stencil_id):
-    stencil = session.get(Stencil, stencil_id)
-    filePath = os.path.abspath('stencils/' + stencil_id + '.' + stencil.fileName.split('.')[-1])
+@app.route('/download/<stencilId>')
+def download(stencilId):
+    stencil = session.get(Stencil, stencilId)
+    filePath = os.path.abspath('stencils/' + stencilId + '.' + stencil.fileName.split('.')[-1])
     stencil.downloadCounter +=1
     session.commit()
     return send_file(filePath, download_name=stencil.fileName, as_attachment=True)
+
+@app.route('/getshape/<masterId>')
+def getshape(masterId):
+    master = session.get(Master, masterId)
+    return master.dataObject
 
 if __name__ == "__main__":
     app.run(debug=True)
