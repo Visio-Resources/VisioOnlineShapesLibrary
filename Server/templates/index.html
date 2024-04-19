@@ -105,12 +105,21 @@
       <div class="stencilKeywords">
         {{master.keywords}}
       </div>
+      {% if master.stencil is none %}
+      <div class="stencilDownload">
+        No stencil</a>
+      </div>
+      <div class="stencilUploadDate">
+        Upload date: {{master.uploadDate.strftime('%d.%m.%Y')}} ({{master.downloadCounter}} downloads)
+      </div>
+      {% else %}
       <div class="stencilDownload">
         <a href="/download/{{master.stencil.id}}">{{master.stencil.fileName}}</a>
       </div>
       <div class="stencilUploadDate">
         Upload date: {{master.stencil.uploadDate.strftime('%d.%m.%Y')}} ({{master.stencil.downloadCounter}} downloads)
       </div>
+      {% endif %}
     </div>
   </div>
   {% endfor %}

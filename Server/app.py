@@ -1,14 +1,19 @@
-from flask import Flask, render_template, request, send_file, redirect, url_for
+from flask import Flask, render_template, request, send_file
 from sqlalchemy import create_engine
-from sqlalchemy import select, update
+from sqlalchemy import select
 from sqlalchemy.orm import Session
+from sqlalchemy_utils import database_exists
 from models import *
 import os
 
 app = Flask(__name__)
 app.config['PREVIEW_FOLDER'] = os.path.abspath('./static/images')
 
-engine = create_engine('sqlite:///db.db', echo = True)
+engine = create_engine('sqlite:///db.db', echo = False)
+
+if not database_exists(engine.url):
+    Base.metadata.create_all(engine)
+
 connect = engine.connect()
 session = Session(connect)
 
@@ -33,6 +38,8 @@ def download(stencilId):
 @app.route('/getshape/<masterId>')
 def getshape(masterId):
     master = session.get(Master, masterId)
+    master.downloadCounter += 1
+    session.commit()
     return master.dataObject
 
 @app.route("/addShape", methods=['GET','POST'])
@@ -60,8 +67,7 @@ def addShape():
                 name = name,
                 prompt = prompt,
                 keywords = keywords,
-                dataObject = dataObject,
-                stencilId = 1
+                dataObject = dataObject
     )
     session.add(newShape)
     session.commit()
