@@ -48,7 +48,7 @@ namespace VisioAddin
             postDataStream.Seek(0, SeekOrigin.Begin);
             CoreWebView2WebResourceRequest webResourceRequest =
                 webView.CoreWebView2.Environment.CreateWebResourceRequest(
-                "http://127.0.0.1:5000",
+                Globals.ThisAddIn.ServerUrl,
                 "POST",
                 postDataStream,
                 "Content-Type: application/x-www-form-urlencoded\r\n");
@@ -57,7 +57,7 @@ namespace VisioAddin
 
         private void webView_NavigationStarting(object sender, CoreWebView2NavigationStartingEventArgs e)
         {
-            if (!(e.Uri.ToString().Equals("http://127.0.0.1:5000/", StringComparison.InvariantCultureIgnoreCase)))
+            if (!(e.Uri.ToString().Equals(Globals.ThisAddIn.ServerUrl + "/", StringComparison.InvariantCultureIgnoreCase)))
             {
                 e.Cancel = true;
                 System.Diagnostics.Process.Start(e.Uri.ToString());

@@ -6,6 +6,7 @@ namespace VisioAddin
     public partial class ThisAddIn
     {
         public event EventHandler OnContribute;
+        public string ServerUrl = "https://www.visio-shapes.com";
 
         public void TogglePanel()
         {

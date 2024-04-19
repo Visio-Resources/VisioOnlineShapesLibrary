@@ -26,5 +26,11 @@ namespace VisioAddin
             var form = new Ui.FrmContributeShape(shape);
             form.ShowDialog();
         }
+
+        private void dropDownServer_SelectionChanged(object sender, RibbonControlEventArgs e)
+        {
+            Globals.ThisAddIn.ServerUrl = dropDownServer.SelectedItem.Label;
+            Globals.ThisAddIn.RaiseEventOnContribute("");
+        }
     }
 }

@@ -34,8 +34,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl1 = this.Factory.CreateRibbonDropDownItem();
+            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl2 = this.Factory.CreateRibbonDropDownItem();
             this.Tab1 = this.Factory.CreateRibbonTab();
             this.Group1 = this.Factory.CreateRibbonGroup();
+            this.dropDownServer = this.Factory.CreateRibbonDropDown();
             this.btnOnlineShapes = this.Factory.CreateRibbonButton();
             this.sBtnContribute = this.Factory.CreateRibbonSplitButton();
             this.btnContributeStencil = this.Factory.CreateRibbonButton();
@@ -53,10 +56,22 @@
             // 
             // Group1
             // 
+            this.Group1.Items.Add(this.dropDownServer);
             this.Group1.Items.Add(this.btnOnlineShapes);
             this.Group1.Items.Add(this.sBtnContribute);
             this.Group1.Label = "Online Shapes";
             this.Group1.Name = "Group1";
+            // 
+            // dropDownServer
+            // 
+            ribbonDropDownItemImpl1.Label = "https://www.visio-shapes.com";
+            ribbonDropDownItemImpl2.Label = "http://127.0.0.1:5000";
+            this.dropDownServer.Items.Add(ribbonDropDownItemImpl1);
+            this.dropDownServer.Items.Add(ribbonDropDownItemImpl2);
+            this.dropDownServer.Label = "Server";
+            this.dropDownServer.Name = "dropDownServer";
+            this.dropDownServer.SizeString = "https://www.visio-shapes.com";
+            this.dropDownServer.SelectionChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.dropDownServer_SelectionChanged);
             // 
             // btnOnlineShapes
             // 
@@ -103,6 +118,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnOnlineShapes;
         internal Microsoft.Office.Tools.Ribbon.RibbonSplitButton sBtnContribute;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnContributeStencil;
+        internal Microsoft.Office.Tools.Ribbon.RibbonDropDown dropDownServer;
     }
 
     partial class ThisRibbonCollection

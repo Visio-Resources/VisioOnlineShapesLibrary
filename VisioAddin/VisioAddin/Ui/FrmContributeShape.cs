@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Windows.Forms;
 using Visio = Microsoft.Office.Interop.Visio;
@@ -60,7 +61,13 @@ namespace VisioAddin.Ui
             };
 
             var myHttpClient = new HttpClient();
-            var response = await myHttpClient.PostAsync("http://127.0.0.1:5000/addShape", formContent);
+            if (Globals.ThisAddIn.ServerUrl.StartsWith("https"))
+            {
+                ServicePointManager.Expect100Continue = true;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            }
+            
+            var response = await myHttpClient.PostAsync(Globals.ThisAddIn.ServerUrl + "/addShape", formContent);
             string stringContent = await response.Content.ReadAsStringAsync();
 
             if (Globals.ThisAddIn._panelManager.IsPanelOpened(Globals.ThisAddIn.Application.ActiveWindow))
