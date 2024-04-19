@@ -37,6 +37,8 @@
             this.Tab1 = this.Factory.CreateRibbonTab();
             this.Group1 = this.Factory.CreateRibbonGroup();
             this.btnOnlineShapes = this.Factory.CreateRibbonButton();
+            this.sBtnContribute = this.Factory.CreateRibbonSplitButton();
+            this.btnContributeStencil = this.Factory.CreateRibbonButton();
             this.Tab1.SuspendLayout();
             this.Group1.SuspendLayout();
             this.SuspendLayout();
@@ -52,7 +54,8 @@
             // Group1
             // 
             this.Group1.Items.Add(this.btnOnlineShapes);
-            this.Group1.Label = "Online";
+            this.Group1.Items.Add(this.sBtnContribute);
+            this.Group1.Label = "Online Shapes";
             this.Group1.Name = "Group1";
             // 
             // btnOnlineShapes
@@ -64,6 +67,21 @@
             this.btnOnlineShapes.ScreenTip = "Online shapes library";
             this.btnOnlineShapes.ShowImage = true;
             this.btnOnlineShapes.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnOnlineShapes_Click);
+            // 
+            // sBtnContribute
+            // 
+            this.sBtnContribute.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.sBtnContribute.Items.Add(this.btnContributeStencil);
+            this.sBtnContribute.Label = "Contribute Shape";
+            this.sBtnContribute.Name = "sBtnContribute";
+            this.sBtnContribute.OfficeImageId = "ShareThisNotebook";
+            this.sBtnContribute.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.sBtnContribute_Click);
+            // 
+            // btnContributeStencil
+            // 
+            this.btnContributeStencil.Label = "Contribute Stencil";
+            this.btnContributeStencil.Name = "btnContributeStencil";
+            this.btnContributeStencil.ShowImage = true;
             // 
             // AddinRibbonComponent
             // 
@@ -83,6 +101,8 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonTab Tab1;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup Group1;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnOnlineShapes;
+        internal Microsoft.Office.Tools.Ribbon.RibbonSplitButton sBtnContribute;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnContributeStencil;
     }
 
     partial class ThisRibbonCollection

@@ -34,7 +34,7 @@
             // 
             // webView
             // 
-            this.webView.AllowExternalDrop = true;
+            this.webView.AllowExternalDrop = false;
             this.webView.CreationProperties = null;
             this.webView.DefaultBackgroundColor = System.Drawing.Color.White;
             this.webView.Dock = System.Windows.Forms.DockStyle.Fill;

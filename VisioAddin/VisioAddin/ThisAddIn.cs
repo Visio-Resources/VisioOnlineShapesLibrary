@@ -5,12 +5,14 @@ namespace VisioAddin
 {
     public partial class ThisAddIn
     {
+        public event EventHandler OnContribute;
+
         public void TogglePanel()
         {
             _panelManager.TogglePanel(Application.ActiveWindow);
         }
 
-        private PanelManager _panelManager;
+        internal PanelManager _panelManager;
 
         private void ThisAddIn_Startup(object sender, EventArgs e)
         {
@@ -30,6 +32,11 @@ namespace VisioAddin
         {
             Startup += ThisAddIn_Startup;
             Shutdown += ThisAddIn_Shutdown;
+        }
+
+        public void RaiseEventOnContribute(string name)
+        {
+            this.OnContribute?.Invoke(name, null);
         }
     }
 }

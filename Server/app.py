@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, request, send_file, redirect, url_for
 from sqlalchemy import create_engine
 from sqlalchemy import select, update
 from sqlalchemy.orm import Session
@@ -6,6 +6,7 @@ from models import *
 import os
 
 app = Flask(__name__)
+app.config['PREVIEW_FOLDER'] = os.path.abspath('./static/images')
 
 engine = create_engine('sqlite:///db.db', echo = True)
 connect = engine.connect()
@@ -33,6 +34,40 @@ def download(stencilId):
 def getshape(masterId):
     master = session.get(Master, masterId)
     return master.dataObject
+
+@app.route("/addShape", methods=['GET','POST'])
+def addShape():
+    if request.method != 'POST':
+        return ''
+    if 'image' not in request.files:
+        return ''
+    file = request.files['image']
+    if file.filename == '':
+        return ''
+    if not file:
+        return ''
+    if file.filename.rsplit('.', 1)[1].lower() != "png":
+        return ''
+    
+    name = request.form['name']
+    prompt = request.form['prompt']
+    keywords = request.form['keywords']
+    dataObject = request.form['dataObject']
+
+    newId = session.query(func.count(Master.id)).scalar() + 1
+    newShape = Master(
+                id = newId,
+                name = name,
+                prompt = prompt,
+                keywords = keywords,
+                dataObject = dataObject,
+                stencilId = 1
+    )
+    session.add(newShape)
+    session.commit()
+    filename = f"{newId}.png"
+    file.save(os.path.join(app.config['PREVIEW_FOLDER'], filename))
+    return ''
 
 if __name__ == "__main__":
     app.run(debug=True)

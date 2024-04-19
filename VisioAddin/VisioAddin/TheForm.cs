@@ -21,6 +21,7 @@ namespace VisioAddin
             _window = window;
             InitializeComponent();
             InitializeAsync();
+            Globals.ThisAddIn.OnContribute += OnContribute_Raised;
         }
 
         async void InitializeAsync()
@@ -30,6 +31,11 @@ namespace VisioAddin
             await webView.EnsureCoreWebView2Async(cwv2Environment);
             webView.CoreWebView2.AddHostObjectToScript("WebViewDragDrop", new WebViewDragDrop(this));
             Search("");
+        }
+
+        private void OnContribute_Raised(object sender, EventArgs e)
+        {
+            Search(sender as string);
         }
 
         private void Search(string search)
