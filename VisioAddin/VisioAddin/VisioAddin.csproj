@@ -76,6 +76,9 @@
     <Reference Include="Microsoft.Web.WebView2.Wpf, Version=1.0.2420.47, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.WebView2.1.0.2420.47\lib\net45\Microsoft.Web.WebView2.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -113,7 +116,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Handlers\SettingsHandler.cs" />
+    <Compile Include="Models\Server.cs" />
+    <Compile Include="Models\ServerSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="ThisAddIn.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -124,9 +135,26 @@
     <Compile Include="Ui\FrmContributeShape.Designer.cs">
       <DependentUpon>FrmContributeShape.cs</DependentUpon>
     </Compile>
+    <Compile Include="Ui\FrmContributeStencil.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ui\FrmContributeStencil.Designer.cs">
+      <DependentUpon>FrmContributeStencil.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\frmSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ui\frmSettings.Designer.cs">
+      <DependentUpon>frmSettings.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="ThisAddIn.Designer.xml">
       <DependentUpon>ThisAddIn.cs</DependentUpon>
     </None>
@@ -150,9 +178,15 @@
     <EmbeddedResource Include="Ui\FrmContributeShape.resx">
       <DependentUpon>FrmContributeShape.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Ui\FrmContributeStencil.resx">
+      <DependentUpon>FrmContributeStencil.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ui\frmSettings.resx">
+      <DependentUpon>frmSettings.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\TogglePanel.png" />
+    <None Include="Resources\Settings.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\Resources.Designer.cs">
@@ -164,9 +198,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Resources\Command1.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddinRibbonComponent.cs">
@@ -181,6 +212,9 @@
       <DependentUpon>AddinRibbonComponent.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Contribute.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
