@@ -5,7 +5,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
 	xmlns:visio="http://schemas.microsoft.com/wix/Visio" >
 
-  <?define Version="1.0.0.0"?>
+  <?define Version="0.1.0.0"?>
   <?define ProductCode = "{9b4b6b1e-a705-447a-b3b5-131dc6948d51}" ?>
   <?define UpgradeCode = "{1d1f0cf9-825c-442a-9d6e-d2cccecaae31}" ?>
 

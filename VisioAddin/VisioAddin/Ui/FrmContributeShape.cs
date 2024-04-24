@@ -61,13 +61,13 @@ namespace VisioAddin.Ui
             };
 
             var myHttpClient = new HttpClient();
-            if (Globals.ThisAddIn.ServerUrl.StartsWith("https"))
+            if (Globals.ThisAddIn.ServerHandler.CurrentServerUrl.StartsWith("https"))
             {
                 ServicePointManager.Expect100Continue = true;
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             }
-            
-            var response = await myHttpClient.PostAsync(Globals.ThisAddIn.ServerUrl + "/addShape", formContent);
+
+            var response = await myHttpClient.PostAsync(Globals.ThisAddIn.ServerHandler.CurrentServerUrl + "/addShape", formContent);
             string stringContent = await response.Content.ReadAsStringAsync();
 
             if (Globals.ThisAddIn._panelManager.IsPanelOpened(Globals.ThisAddIn.Application.ActiveWindow))

@@ -131,7 +131,7 @@
       var master = masters[i];
       master.addEventListener("mousedown", (e) => {
         if (e.button === 0) {
-          fetch('https://www.visio-shapes.com/getshape/' + e.currentTarget.id)
+          fetch(window.location.href + 'getshape/' + e.currentTarget.id)
           .then(response => response.text())
           .then(text => WebViewDragDrop.DragDropShape(text))
         }
