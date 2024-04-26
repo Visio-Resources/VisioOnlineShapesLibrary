@@ -1,0 +1,9 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="VisioAddin.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ServerSettings" Type="System.String" Scope="User">
+      <Value Profile="(Default)">"{\"Servers\":[{\"Name\":\"www.visio-shapes.com\",\"Url\":\"https://www.visio-shapes.com\",\"User\":\"\",\"Password\":\"\"},{\"Name\":\"localhost\",\"Url\":\"http://127.0.0.1:5000\",\"User\":\"\",\"Password\":\"\"}],\"CurrentServer\":\"www.visio-shapes.com\"}"</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
