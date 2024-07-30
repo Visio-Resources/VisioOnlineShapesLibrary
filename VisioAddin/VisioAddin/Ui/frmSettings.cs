@@ -19,7 +19,7 @@ namespace VisioAddin.Ui
 
             foreach (var server in Globals.ThisAddIn.ServerHandler.Servers)
             {
-                dataGridView.Rows.Add(server.Name, server.Url, server.User, server.Password);
+                dataGridView.Rows.Add(server.Name, server.Url, server.Token);
             }
         }
 
@@ -33,18 +33,17 @@ namespace VisioAddin.Ui
                 if (row.IsNewRow) continue;
                 Models.Server server = new Models.Server
                 {
-                    Name = row.Cells["Name"].Value?.ToString() ?? "",
-                    Url = row.Cells["URL"].Value?.ToString() ?? "",
-                    User = row.Cells["User"].Value?.ToString() ?? "",
-                    Password = row.Cells["Password"].Value?.ToString() ?? ""
+                    Name = row.Cells["colName"].Value?.ToString() ?? "",
+                    Url = row.Cells["colUrl"].Value?.ToString() ?? "",
+                    Token = row.Cells["colToken"].Value?.ToString() ?? ""
                 };
                 serverSettings.Servers.Add(server);
                 serverSettings.CurrentServer = server.Name;
             }
 
-            if (serverSettings.Servers.Where(s => s.Name == Globals.ThisAddIn.ServerHandler.CurrentServer).Count() == 1)
+            if (serverSettings.Servers.Where(s => s.Name == Globals.ThisAddIn.ServerHandler.CurrentServerName).Count() == 1)
             {
-                serverSettings.CurrentServer = Globals.ThisAddIn.ServerHandler.CurrentServer;
+                serverSettings.CurrentServer = Globals.ThisAddIn.ServerHandler.CurrentServerName;
             }
 
             Globals.ThisAddIn.ServerHandler.ServerSettings = serverSettings;

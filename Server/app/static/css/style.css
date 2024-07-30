@@ -1,0 +1,60 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+    margin: 0;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    background-color: #e09f1e;
+    height: 25px;
+    padding: 16px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+}
+
+.stencilContainer {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 16px;
+    border-radius: 8px;
+    margin: 8px;
+    display: flex;
+    gap: 8px;
+}
+
+.stencilPreview {
+    width: 200px;
+}
+
+.stencilImage {
+    display: block;
+    max-width: 150px;
+    max-height: 500px;
+}
+
+.stencilText {
+    display: flex;
+    flex-direction: column;
+}
+
+.stencilName {
+    font-size: large;
+}
+
+.stencilPrompt {
+    font-size: small;
+}
+
+.stencilKeywords {
+    font-size: small;
+}
+
+.stencilDownload {
+    font-size: small;
+}
+
+.stencilUploadDate {
+    color: rgba(0, 0, 0, 0.4);
+    font-size: smaller;
+}

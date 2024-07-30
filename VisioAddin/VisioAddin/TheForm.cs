@@ -1,7 +1,10 @@
 ﻿using Microsoft.Web.WebView2.Core;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Windows.Forms;
 using Visio = Microsoft.Office.Interop.Visio;
@@ -38,7 +41,7 @@ namespace VisioAddin
                 {
                     cbServer.Items.Add(server.Name);
                 }
-                cbServer.SelectedItem = Globals.ThisAddIn.ServerHandler.CurrentServer;
+                cbServer.SelectedItem = Globals.ThisAddIn.ServerHandler.CurrentServerName;
             }
 
             initializing = false;
@@ -50,7 +53,29 @@ namespace VisioAddin
             CoreWebView2Environment cwv2Environment = await CoreWebView2Environment.CreateAsync(null, userDataFolder, null);
             await webView.EnsureCoreWebView2Async(cwv2Environment);
             webView.CoreWebView2.AddHostObjectToScript("WebViewDragDrop", new WebViewDragDrop(this));
-            Search("");
+            Login();
+        }
+
+        private void Login()
+        {
+            string postDataString = "token=" + Globals.ThisAddIn.ServerHandler.CurrentServerToken;
+            UTF8Encoding utfEncoding = new UTF8Encoding();
+            byte[] postData = utfEncoding.GetBytes(postDataString);
+            MemoryStream postDataStream = new MemoryStream(postDataString.Length);
+            postDataStream.Write(postData, 0, postData.Length);
+            postDataStream.Seek(0, SeekOrigin.Begin);
+
+            CoreWebView2WebResourceRequest webResourceRequest =
+                webView.CoreWebView2.Environment.CreateWebResourceRequest(
+                Globals.ThisAddIn.ServerHandler.CurrentServerUrl + "/token_login",
+                "POST",
+                postDataStream,
+                "Content-Type: application/x-www-form-urlencoded\r\n");
+            try
+            {
+                webView.CoreWebView2.NavigateWithWebResourceRequest(webResourceRequest);
+            }
+            catch { }
         }
 
         delegate void SearchCallback(string search);
@@ -103,8 +128,8 @@ namespace VisioAddin
         {
             if (!(e.Uri.ToString().Equals(Globals.ThisAddIn.ServerHandler.CurrentServerUrl + "/", StringComparison.InvariantCultureIgnoreCase)))
             {
-                e.Cancel = true;
-                System.Diagnostics.Process.Start(e.Uri.ToString());
+                //e.Cancel = true;
+                //System.Diagnostics.Process.Start(e.Uri.ToString());
             }
         }
 
@@ -123,9 +148,44 @@ namespace VisioAddin
             {
                 try
                 {
-                    MemoryStream stream = new MemoryStream(Convert.FromBase64String(shapeData));
-                    DataObject obj = new DataObject("Visio 15.0 Shapes", stream);
-                    M.DoDragDrop(obj, DragDropEffects.All);
+                    Dictionary<string, string> dictDataObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(shapeData);
+                    DataObject dataObject = new DataObject();
+
+                    foreach (var format in dictDataObject.Keys)
+                    {
+                        MemoryStream streamData = new MemoryStream(Convert.FromBase64String(dictDataObject[format]));
+                        dataObject.SetData(format, streamData);
+
+                        //if (format == "UnicodeText" || format == "Text")
+                        //{
+                        //    MemoryStream streamData = new MemoryStream(Convert.FromBase64String(dictDataObject[format]));
+                        //    StreamReader reader = new StreamReader(streamData);
+                        //    string txt = reader.ReadToEnd();
+                        //    dataObject.SetData(format, txt);
+                        //}
+                        //else
+                        //{
+                        //    MemoryStream streamData = new MemoryStream(Convert.FromBase64String(dictDataObject[format]));
+                        //    dataObject.SetData(format, streamData);
+                        //}
+
+
+                        //dataObject.SetData("Visio 15.0 Text", null);
+                        //dataObject.SetData("Visio 11.0 Shapes", null);
+                        //dataObject.SetData("UnicodeText", null);
+                        //dataObject.SetData("Embed Source", null);
+                        //dataObject.SetData("Link Source", null);
+                        //dataObject.SetData("Link Source Descriptor", null);
+                        //dataObject.SetData("NoteshNote", null);
+                        //dataObject.SetData("NotesDocAction", null);
+                        //dataObject.SetData("EnhancedMetafile", null);
+                        //dataObject.SetData("MetaFilePict", null);
+                        //dataObject.SetData("Text", null);
+                        //dataObject.SetData("DeviceIndependentBitmap", null);
+
+                    }
+
+                    M.DoDragDrop(dataObject, DragDropEffects.All);
                 }
                 catch { }
             }
@@ -163,8 +223,8 @@ namespace VisioAddin
         private void cbServer_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (initializing) return;
-            Globals.ThisAddIn.ServerHandler.CurrentServer = cbServer.ComboBox.SelectedItem.ToString();
-            Search("");
+            Globals.ThisAddIn.ServerHandler.CurrentServerName = cbServer.ComboBox.SelectedItem.ToString();
+            Login();
         }
     }
 }

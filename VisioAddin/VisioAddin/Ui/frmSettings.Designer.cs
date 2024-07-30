@@ -31,10 +31,9 @@
             this.dataGridView = new System.Windows.Forms.DataGridView();
             this.btnOk = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.ServerName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Url = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.User = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Password = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colUrl = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colToken = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -46,10 +45,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ServerName,
-            this.Url,
-            this.User,
-            this.Password});
+            this.colName,
+            this.colUrl,
+            this.colToken});
             this.dataGridView.Location = new System.Drawing.Point(0, 0);
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.RowHeadersWidth = 51;
@@ -79,33 +77,26 @@
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // Name
+            // colName
             // 
-            this.ServerName.HeaderText = "Name";
-            this.ServerName.MinimumWidth = 6;
-            this.ServerName.Name = "Name";
-            this.ServerName.Width = 150;
+            this.colName.HeaderText = "Name";
+            this.colName.MinimumWidth = 6;
+            this.colName.Name = "colName";
+            this.colName.Width = 150;
             // 
-            // Url
+            // colUrl
             // 
-            this.Url.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Url.HeaderText = "URL";
-            this.Url.MinimumWidth = 6;
-            this.Url.Name = "Url";
+            this.colUrl.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colUrl.HeaderText = "URL";
+            this.colUrl.MinimumWidth = 6;
+            this.colUrl.Name = "colUrl";
             // 
-            // User
+            // colToken
             // 
-            this.User.HeaderText = "User";
-            this.User.MinimumWidth = 6;
-            this.User.Name = "User";
-            this.User.Width = 150;
-            // 
-            // Password
-            // 
-            this.Password.HeaderText = "Password";
-            this.Password.MinimumWidth = 6;
-            this.Password.Name = "Password";
-            this.Password.Width = 150;
+            this.colToken.HeaderText = "Token";
+            this.colToken.MinimumWidth = 6;
+            this.colToken.Name = "colToken";
+            this.colToken.Width = 150;
             // 
             // frmSettings
             // 
@@ -127,9 +118,8 @@
         private System.Windows.Forms.DataGridView dataGridView;
         private System.Windows.Forms.Button btnOk;
         private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ServerName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Url;
-        private System.Windows.Forms.DataGridViewTextBoxColumn User;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Password;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colUrl;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colToken;
     }
 }

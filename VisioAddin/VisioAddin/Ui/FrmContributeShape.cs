@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Windows.Forms;
 using Visio = Microsoft.Office.Interop.Visio;
+using Newtonsoft.Json;
+using System.Text;
+using System.Net.Http.Headers;
 
 namespace VisioAddin.Ui
 {
@@ -36,9 +40,55 @@ namespace VisioAddin.Ui
                 return;
             }
 
-            DataObject dataObj = new DataObject(Shape);
-            MemoryStream stream = (MemoryStream)dataObj.GetData("Visio 15.0 Shapes");
-            string shapeData = Convert.ToBase64String(stream.ToArray());
+            DataObject dataObject = new DataObject(Shape);
+            Dictionary<string, string> dictDataObject = new Dictionary<string, string>();
+            foreach (string format in dataObject.GetFormats(false))
+            {
+                MemoryStream streamData = null;
+
+                // -: is null
+                // + "Visio 15.0 Shapes"
+                // - "Visio 15.0 Text"
+                // - "Visio 11.0 Shapes"
+                // + "UnicodeText"
+                // - "Embed Source"
+                // + "Link Source"
+                // + "Object Descriptor"
+                // - "Link Source Descriptor"
+                // - "NoteshNote"
+                // - "NotesDocAction"
+                // - "EnhancedMetafile"
+                // - "MetaFilePict"
+                // + "Text"
+                // + "DeviceIndependentBitmap"
+
+                if (format == "UnicodeText")
+                {
+                    //byte[] byteArray = Encoding.UTF8.GetBytes((string)dataObject.GetData(format));
+                    //streamData = new MemoryStream(byteArray);
+                }
+                else if (format == "Text")
+                {
+                    //byte[] byteArray = Encoding.ASCII.GetBytes((string)dataObject.GetData(format));
+                    //streamData = new MemoryStream(byteArray);
+                }
+                else if (format == "Visio 15.0 Shapes")
+                {
+                    streamData = (MemoryStream)dataObject.GetData(format);
+                }
+                else if (format == "Object Descriptor")
+                {
+                    streamData = (MemoryStream)dataObject.GetData(format);
+                }
+                else
+                {
+                    continue;
+                }
+
+                if (streamData is null) continue;
+
+                dictDataObject[format] = Convert.ToBase64String(streamData.ToArray());
+            }
 
             string imagePath = Path.Combine(Path.GetTempPath(), "image.png");
             Shape.Export(imagePath);
@@ -48,27 +98,40 @@ namespace VisioAddin.Ui
                 image = Image.FromStream(fileStream);
             }
             File.Delete(imagePath);
-            ImageConverter _imageConverter = new ImageConverter();
             byte[] paramFileStream = ImageToByte2(image);
 
-            var formContent = new MultipartFormDataContent
+            Models.OnlineShape onlineShape = new Models.OnlineShape();
+
+            onlineShape.Name = tbName.Text;
+            onlineShape.Prompt = tbPrompt.Text;
+            onlineShape.Keywords = tbKeywords.Text;
+            onlineShape.DataObject = JsonConvert.SerializeObject(dictDataObject);
+
+            string json = JsonConvert.SerializeObject(onlineShape);
+
+            var content = new MultipartFormDataContent()
             {
-                {new StringContent(tbName.Text), "name"},
-                {new StringContent(tbPrompt.Text), "prompt"},
-                {new StringContent(tbKeywords.Text), "keywords"},
-                {new StringContent(shapeData), "dataObject"},
+                {new StringContent(json, Encoding.UTF8, "application/json"), "json"},
                 {new StreamContent(new MemoryStream(paramFileStream)), "image", "image.png"}
             };
 
-            var myHttpClient = new HttpClient();
+            var httpClient = new HttpClient();
+            string token = Globals.ThisAddIn.ServerHandler.CurrentServerToken;
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             if (Globals.ThisAddIn.ServerHandler.CurrentServerUrl.StartsWith("https"))
             {
                 ServicePointManager.Expect100Continue = true;
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             }
 
-            var response = await myHttpClient.PostAsync(Globals.ThisAddIn.ServerHandler.CurrentServerUrl + "/addShape", formContent);
-            string stringContent = await response.Content.ReadAsStringAsync();
+            var response = await httpClient.PostAsync(Globals.ThisAddIn.ServerHandler.CurrentServerUrl + "/add_shape", content);
+            string strResponse = await response.Content.ReadAsStringAsync();
+            MessageBox.Show(strResponse);
+            if (strResponse == "Failed")
+            {
+                MessageBox.Show("Upload failed, check creditals.");
+                return;
+            }
 
             if (Globals.ThisAddIn._panelManager.IsPanelOpened(Globals.ThisAddIn.Application.ActiveWindow))
             {

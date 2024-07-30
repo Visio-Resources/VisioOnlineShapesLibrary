@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Shapes{% endblock %}
+
+{% block content %}
+    <header>
+        <form class="search" action="" method="POST">
+            <input name="search" placeholder="Search...">
+        </form>
+    </header>
+
+    {% for shape in shapes %}
+        <div class="stencilContainer">
+        <div class="stencilPreview" id="{{shape.id}}">
+        <a href="{{ url_for('static', filename='images/shapes/'~shape.id~'.png') }}"> <img class="stencilImage"
+        src="{{ url_for('static', filename='images/shapes/'~shape.id~'.png') }}" /> </a>
+        </div>
+        <div class="stencilText">
+        <div class="stencilName">
+        {{shape.name}}
+        </div>
+        <div class="stencilPrompt">
+        {{shape.prompt}}
+        </div>
+        <div class="stencilKeywords">
+        {{shape.keywords}}
+        </div>
+        {% if shape.stencil is none %}
+            <div class="stencilDownload">
+            No stencil
+            </div>
+            <div class="stencilUploadDate">
+            Upload date: {{shape.upload_date.strftime('%d.%m.%Y')}} ({{shape.upload_date}} downloads)
+            </div>
+        {% else %}
+            <div class="stencilDownload">
+            <a href="/download_stencil/{{shape.stencil.id}}">{{shape.stencil.file_name}}</a>
+            </div>
+            <div class="stencilUploadDate">
+            Upload date: {{shape.stencil.upload_date.strftime('%d.%m.%Y')}} ({{shape.stencil.upload_date}} downloads)
+            </div>
+        {% endif %}
+        </div>
+        </div>
+    {% else %}
+        <p>No results</p>
+    {% endfor %}
+
+    <script>
+        var WebViewDragDrop = window.chrome.webview.hostObjects.WebViewDragDrop;
+        var shapes = document.getElementsByClassName('stencilPreview');
+        for( i=0; i < shapes.length; i++ ){
+            var shape = shapes[i];
+            shape.addEventListener("mousedown", (e) => {
+                if (e.button === 0) {
+                    fetch(window.location.href + 'get_shape/' + e.currentTarget.id)
+                    .then(response => response.text())
+                    .then(text => WebViewDragDrop.DragDropShape(text))
+                }
+            });
+        }
+    </script>
+{% endblock %}

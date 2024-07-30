@@ -1,0 +1,46 @@
+<h1>Shape Search</h1>
+<div id="results"></div>
+
+<script>
+let shapes = [];
+
+async function searchShapes() {
+    const response = await fetch('http://localhost:5000/get_shapes');
+    shapes = await response.json();
+    displayShapes();
+}
+
+function displayShapes() {
+    const resultsDiv = document.getElementById('results');
+    resultsDiv.innerHTML = '';
+
+    shapes.forEach((shape, index) => {
+        const shapeDiv = document.createElement('div');
+        shapeDiv.className = 'shape';
+        shapeDiv.innerHTML = `
+            <p>ID: ${shape.id}</p>
+            <p>Author: ${shape.author}</p>
+            <p>Name: ${shape.name}</p>
+            <p>Categories: ${shape.categories.join(', ')}</p>
+            <button onclick="loadDataObject(${index}, this)">Load DataObject</button>
+            <pre class="data-object"></pre>
+        `;
+        resultsDiv.appendChild(shapeDiv);
+    });
+}
+
+async function loadDataObject(index, button) {
+    const shapeId = shapes[index].id;
+    const response = await fetch(`http://localhost:5000/shape/${shapeId}`);
+    const shapeWithDataObject = await response.json();
+    shapes[index].data_object = shapeWithDataObject.data_object;
+
+    const dataObjectDiv = button.nextElementSibling;
+    dataObjectDiv.textContent = shapeWithDataObject.data_object;
+    button.style.display = 'none';  // Hide the button after loading
+}
+
+// Initial search on page load
+searchShapes();
+</script>
+

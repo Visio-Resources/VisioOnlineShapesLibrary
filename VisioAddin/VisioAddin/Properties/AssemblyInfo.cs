@@ -8,10 +8,10 @@
 [assembly: AssemblyTitle("VisioOnlineShapesLibrary")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("thomas")]
+[assembly: AssemblyCompany("Thomas Winkel")]
 [assembly: AssemblyProduct("")]
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-[assembly: AssemblyVersion("0.1.5.0")]
+[assembly: AssemblyVersion("0.1.6.0")]

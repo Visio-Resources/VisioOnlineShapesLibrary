@@ -25,7 +25,7 @@ namespace VisioAddin.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute(@"""{\""Servers\"":[{\""Name\"":\""www.visio-shapes.com\"",\""Url\"":\""https://www.visio-shapes.com\"",\""User\"":\""\"",\""Password\"":\""\""},{\""Name\"":\""localhost\"",\""Url\"":\""http://127.0.0.1:5000\"",\""User\"":\""\"",\""Password\"":\""\""}],\""CurrentServer\"":\""www.visio-shapes.com\""}""")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string ServerSettings {
             get {
                 return ((string)(this["ServerSettings"]));

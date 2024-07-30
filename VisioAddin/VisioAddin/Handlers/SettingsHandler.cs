@@ -14,9 +14,17 @@ namespace VisioAddin.Handlers
 
             if (json != "")
             {
-                ServerSettings = JsonConvert.DeserializeObject<Models.ServerSettings>(json);
+                try
+                {
+                    ServerSettings = JsonConvert.DeserializeObject<Models.ServerSettings>(json);
+                }
+                catch
+                {
+                    ServerSettings = null;
+                }
             }
-            else
+
+            if (ServerSettings is null)
             {
                 ServerSettings = new Models.ServerSettings();
                 ServerSettings.Servers = new List<Models.Server>();
@@ -25,8 +33,7 @@ namespace VisioAddin.Handlers
                 {
                     Name = "www.visio-shapes.com",
                     Url = "https://www.visio-shapes.com",
-                    User = "",
-                    Password = ""
+                    Token = ""
                 };
                 ServerSettings.Servers.Add(server);
 
@@ -34,16 +41,17 @@ namespace VisioAddin.Handlers
                 {
                     Name = "localhost",
                     Url = "http://127.0.0.1:5000",
-                    User = "",
-                    Password = ""
+                    Token = ""
                 };
                 ServerSettings.Servers.Add(server);
 
                 ServerSettings.CurrentServer = "www.visio-shapes.com";
+
+                Save();
             }
         }
 
-        public string CurrentServer
+        public string CurrentServerName
         {
             get
             {
@@ -56,12 +64,23 @@ namespace VisioAddin.Handlers
             }
         }
 
+        public string CurrentServerToken
+        {
+            get
+            {
+                if (ServerSettings.Servers.Count == 0) return null;
+                var server = ServerSettings.Servers.Where(s => s.Name == this.CurrentServerName).FirstOrDefault();
+                if (server == null) return "";
+                return server.Token;
+            }
+        }
+
         public string CurrentServerUrl
         {
             get
             {
                 if (ServerSettings.Servers.Count == 0) return "https://www.visio-shapes.com";
-                var server = ServerSettings.Servers.Where(s => s.Name == this.CurrentServer).FirstOrDefault();
+                var server = ServerSettings.Servers.Where(s => s.Name == this.CurrentServerName).FirstOrDefault();
                 if (server == null) return "https://www.visio-shapes.com";
                 return server.Url;
             }

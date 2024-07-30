@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visio-Shapes</title>
+    <link type="text/css" rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+    <link type="text/css" rel="stylesheet" href="{{url_for('static', filename='css/fonts.css')}}"/>
+    <link rel="shortcut icon" href="{{url_for('static', filename='favicon.ico')}}">
+</head>
+
+<body>
+    <div id="root", hidden="true">
+        <nav id="main-nav" class="sidebar">
+            <a href="/" onclick="route()">Home</a>
+            <a href="/about" onclick="route()">About</a>
+            <a href="/register" onclick="route()">Register</a>
+            <a href="/login" onclick="route()">Login</a>
+            <a href="/logout" onclick="route()">Logout</a>
+        </nav>
+        <div id="app"></div>
+    </div>
+
+    <header>
+        <input id="search" type="text" spellcheck="false" placeholder="Search...">
+        <select id="category-filter">
+            <option value="">All Categories</option>
+        </select>
+        <select id="sort-order">
+            <option value="rating-desc">Rating (High to Low)</option>
+            <option value="rating-asc">Rating (Low to High)</option>
+            <option value="date-desc">Date (Newest to Oldest)</option>
+            <option value="date-asc">Date (Oldest to Newest)</option>
+        </select>
+    </header>
+
+    <div id="shapes-container"></div>
+
+    <script src="{{url_for('static', filename='js/router.js')}}"></script>
+    <script src="{{url_for('static', filename='js/components/shape-card.js')}}"></script>
+    <script src="{{url_for('static', filename='js/app.js')}}"></script>
+</body>
+</html>
